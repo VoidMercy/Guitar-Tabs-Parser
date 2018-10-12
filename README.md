@@ -4,10 +4,10 @@ Goal: Feed in a pdf or jpeg images of guitar tabs and be able to parse out each 
 
 ## Progress
 
-Original Image:
-![](src/out1.jpg)
-
-After 
+Image after running parser: 
 ![](src/result.jpeg)
 
-These numbers are fed into the tesseract OCR with 100% accuracy.
+Original image:
+![](src/out1.jpg)
+
+### These numbers are fed into the tesseract OCR with 100% accuracy.

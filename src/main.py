@@ -22,7 +22,7 @@ def pdf_to_image(filepath):
 		c += 1
 
 #loads the image and calculates some data using numpy
-img = Image.open("out4.jpg").convert("L")
+img = Image.open("out1.jpg").convert("L")
 width, height = img.size
 print "Width: " + str(width)
 print "Height: " + str(height)
@@ -148,6 +148,8 @@ while i < len(horizontal_lines):
 		gucci = True
 horizontal_lines = res
 
+original_data = np.array(Image.open("out1.jpg").convert("L"))
+
 #perform BFS on each of the horizontal lines to identify objects
 visited = []
 for i in horizontal_lines:
@@ -214,6 +216,12 @@ for i in horizontal_lines:
 			conf = pytesseract.image_to_data(temp, config='--psm 10 -c tessedit_char_whitelist=0123456789X').strip().split("\n")[-1].split("\t")[-2]
 			text = pytesseract.image_to_string(temp, config='--psm 10 -c tessedit_char_whitelist=0123456789X')
 			if abs(int(conf) - 20) <= 3:
+				for x in range(greatest[0] - least[0]):
+					original_data[least[1]][least[0] + x] = 0
+					original_data[greatest[1]][least[0] + x] = 0
+				for y in range(greatest[1] - least[1]):
+					original_data[least[1] + y][least[0]] = 0
+					original_data[least[1] + y][greatest[0]] = 0
 				rect = patches.Rectangle((least[0],least[1]),greatest[0]-least[0],greatest[1]-least[1],linewidth=1,edgecolor='r',facecolor='none')
 				ax.add_patch(rect)
 				print text
@@ -221,8 +229,8 @@ for i in horizontal_lines:
 				print "*"*30
 
 print "DONE"
-#im = Image.fromarray(data)
-#im.save("test.jpeg")
+im = Image.fromarray(original_data)
+im.save("result.jpeg")
 
 
 #plt.plot(neighborhood_sums)

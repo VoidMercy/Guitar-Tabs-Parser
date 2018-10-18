@@ -150,6 +150,9 @@ horizontal_lines = res
 
 original_data = np.array(Image.open("out1.jpg"))
 
+#format of this will be elements [(least x, least y), (greatest x, greatest y), horizontal_line_y]
+list_of_notes = []
+
 #perform BFS on each of the horizontal lines to identify objects
 visited = []
 for i in horizontal_lines:
@@ -216,6 +219,8 @@ for i in horizontal_lines:
 			conf = pytesseract.image_to_data(temp, config='--psm 10 -c tessedit_char_whitelist=0123456789X').strip().split("\n")[-1].split("\t")[-2]
 			text = pytesseract.image_to_string(temp, config='--psm 10 -c tessedit_char_whitelist=0123456789X')
 			if abs(int(conf) - 20) <= 3:
+				#high ocr confidence = this is probably a number/letter
+				list_of_notes.append([least, greatest, i])
 				for x in range(greatest[0] - least[0]):
 					original_data[least[1]][least[0] + x] = (255, 0, 0)
 					original_data[greatest[1]][least[0] + x] = (255, 0, 0)
@@ -229,6 +234,8 @@ for i in horizontal_lines:
 				print "*"*30
 
 print "DONE"
+print list_of_notes
+
 im = Image.fromarray(original_data)
 im.save("result.jpeg")
 
